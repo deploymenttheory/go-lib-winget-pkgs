@@ -1,0 +1,39 @@
+// list_by_id demonstrates listing all available versions of a package by its
+// identifier. Versions are returned newest first.
+package main
+
+import (
+	"context"
+	"fmt"
+	"log"
+
+	"github.com/deploymenttheory/go-lib-winget-pkgs/winget"
+	"github.com/deploymenttheory/go-lib-winget-pkgs/winget/config"
+)
+
+func main() {
+	client, err := winget.NewClient(&config.Config{},
+		winget.WithCacheDir("/tmp/winget-cache"),
+	)
+	if err != nil {
+		log.Fatalf("creating client: %v", err)
+	}
+
+	defer func() {
+		if closeErr := client.Close(); closeErr != nil {
+			log.Printf("closing client: %v", closeErr)
+		}
+	}()
+
+	resp, err := client.Versions.ListByID(context.Background(), "Microsoft.PowerShell")
+	if err != nil {
+		log.Fatalf("ListByID: %v", err)
+	}
+
+	fmt.Printf("Package:  %s\n", resp.PackageIdentifier)
+	fmt.Printf("Versions: %d\n\n", len(resp.Versions))
+
+	for _, v := range resp.Versions {
+		fmt.Printf("  %s\n", v)
+	}
+}
