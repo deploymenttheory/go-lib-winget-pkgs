@@ -3,7 +3,7 @@ module github.com/deploymenttheory/go-lib-winget-pkgs
 go 1.25.0
 
 require (
-	github.com/go-git/go-git/v5 v5.17.2
+	github.com/go-git/go-git/v5 v5.18.0
 	go.uber.org/zap v1.27.1
 	gopkg.in/yaml.v3 v3.0.1
 )
